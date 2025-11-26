@@ -1,12 +1,16 @@
 package com.liviadfsilva.pixelpeel.Sticker.model;
 
 import java.math.BigDecimal;
+import java.util.List;
+
+import com.liviadfsilva.pixelpeel.Cart.model.CartItem;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,7 +27,7 @@ public class Sticker {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;    
+    private Long id;
 
     @Column(unique = true, nullable = false)
     private String title;
@@ -42,5 +46,8 @@ public class Sticker {
 
     @Column(nullable = false)
     private String URL;
+
+    @OneToMany(mappedBy = "product")
+    private List<CartItem> cartItems;
 
 }
