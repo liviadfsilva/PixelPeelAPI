@@ -28,6 +28,10 @@ public class CartItem {
     private Integer quantity;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cart_id")
+    private Cart cart;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sticker_id")
     private Sticker sticker;
     
