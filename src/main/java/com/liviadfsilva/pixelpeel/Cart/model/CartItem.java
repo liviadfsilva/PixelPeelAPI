@@ -1,5 +1,7 @@
 package com.liviadfsilva.pixelpeel.Cart.model;
 
+import java.math.BigDecimal;
+
 import com.liviadfsilva.pixelpeel.Sticker.model.Sticker;
 
 import jakarta.persistence.Column;
@@ -26,6 +28,9 @@ public class CartItem {
 
     @Column(nullable = false)
     private Integer quantity;
+
+    @Column(nullable = false)
+    private BigDecimal price;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cart_id")
