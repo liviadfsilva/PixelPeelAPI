@@ -59,6 +59,7 @@ public class CartService {
             item.setCart(cart);
             item.setSticker(sticker);
             item.setQuantity(quantity);
+            item.setPrice(sticker.getPrice());
             cartItemRepository.save(item);
         }
 
