@@ -45,7 +45,7 @@ public class Sticker {
     private String slug;
 
     @Column(nullable = false)
-    private String URL;
+    private String storagePath;
 
     @OneToMany(mappedBy = "sticker")
     private List<CartItem> cartItems;

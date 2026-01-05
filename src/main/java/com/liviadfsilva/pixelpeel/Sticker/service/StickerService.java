@@ -41,7 +41,7 @@ public class StickerService {
         sticker.setDescription(stickerDetails.getDescription());
         sticker.setPrice(stickerDetails.getPrice());
         sticker.setSlug(stickerDetails.getSlug());
-        sticker.setURL(stickerDetails.getURL());
+        sticker.setStoragePath(stickerDetails.getStoragePath());
 
         return repository.save(sticker);
     }
