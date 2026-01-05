@@ -45,6 +45,7 @@ public class UserService {
         user.setEmail(email);
         user.setPassword(encodedPassword);
         user.setRole(Role.USER);
+        user.setIsActive(true);
         return repository.save(user);
     }
 
@@ -55,6 +56,7 @@ public class UserService {
         user.setEmail(email);
         user.setPassword(encodedPassword);
         user.setRole(Role.ADMIN);
+        user.setIsActive(true);
         return repository.save(user);
     }
 
