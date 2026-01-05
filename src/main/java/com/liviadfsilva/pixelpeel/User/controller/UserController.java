@@ -41,12 +41,12 @@ public class UserController {
         return service.getUserById(id);
     }
 
-    @GetMapping
+    @GetMapping("/email/{email}")
     public Optional<User> getUserByEmail(@RequestParam String email) {
         return service.getUserByEmail(email);
     }
 
-    @GetMapping
+    @GetMapping("/role/{role}")
     public List<User> getUserByRole(@RequestParam Role role) {
         return service.getUserByRole(role);
     }
