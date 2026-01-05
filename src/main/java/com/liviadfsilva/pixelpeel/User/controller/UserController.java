@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.liviadfsilva.pixelpeel.User.dto.UserRegistrationDTO;
@@ -42,12 +41,12 @@ public class UserController {
     }
 
     @GetMapping("/email/{email}")
-    public Optional<User> getUserByEmail(@RequestParam String email) {
+    public Optional<User> getUserByEmail(@PathVariable String email) {
         return service.getUserByEmail(email);
     }
 
     @GetMapping("/role/{role}")
-    public List<User> getUserByRole(@RequestParam Role role) {
+    public List<User> getUserByRole(@PathVariable Role role) {
         return service.getUserByRole(role);
     }
 
