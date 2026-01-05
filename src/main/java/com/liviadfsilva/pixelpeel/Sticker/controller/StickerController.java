@@ -35,7 +35,7 @@ public class StickerController {
         .orElseThrow(() -> new RuntimeException("Sticker not found."));
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{slug}")
     public Sticker getStickerBySlug(@PathVariable String slug) {
         return service.getStickerBySlug(slug)
         .orElseThrow(() -> new RuntimeException("Sticker not found."));
