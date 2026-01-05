@@ -29,7 +29,15 @@ public class StickerService {
         return repository.findBySlug(slug);
     }
 
-    public Sticker createSticker(Sticker sticker) {
+    public Sticker createSticker(Sticker stickerDetails) {
+        Sticker sticker = new Sticker();
+        sticker.setTitle(stickerDetails.getTitle());
+        sticker.setDescription(stickerDetails.getDescription());
+        sticker.setCreator(stickerDetails.getCreator());
+        sticker.setPrice(stickerDetails.getPrice());
+        sticker.setSlug(stickerDetails.getSlug());
+        sticker.setStoragePath(stickerDetails.getStoragePath());
+
         return repository.save(sticker);
     }
 
@@ -39,6 +47,7 @@ public class StickerService {
 
         sticker.setTitle(stickerDetails.getTitle());
         sticker.setDescription(stickerDetails.getDescription());
+        sticker.setCreator(stickerDetails.getCreator());
         sticker.setPrice(stickerDetails.getPrice());
         sticker.setSlug(stickerDetails.getSlug());
         sticker.setStoragePath(stickerDetails.getStoragePath());
