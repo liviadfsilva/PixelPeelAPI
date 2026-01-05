@@ -48,20 +48,22 @@ public class User {
     @Column(nullable = false)
     private String name;
 
-    @Column(name = "passwordHash", nullable = false)
+    @Column(name = "password_hash", nullable = false)
     private String password;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
 
-    @Column(nullable = false)
+    @Column(name = "is_active", nullable = false)
     private Boolean isActive;
 
     @CreatedDate
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @LastModifiedDate
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
