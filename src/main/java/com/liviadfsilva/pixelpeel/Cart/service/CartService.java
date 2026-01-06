@@ -13,6 +13,8 @@ import com.liviadfsilva.pixelpeel.Sticker.repository.StickerRepository;
 import com.liviadfsilva.pixelpeel.User.model.User;
 import com.liviadfsilva.pixelpeel.User.repository.UserRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class CartService {
 
@@ -78,6 +80,7 @@ public class CartService {
         return cart;
     }
 
+    @Transactional
     public Cart removeItem(Long userId, Long stickerId) {
         Cart cart = getCartByUserId(userId);
 
@@ -86,6 +89,7 @@ public class CartService {
         return cart;
     }
 
+    @Transactional
     public Cart clearCart(Long userId) {
         Cart cart = getCartByUserId(userId);
         cartItemRepository.deleteByCartId(cart.getId());
