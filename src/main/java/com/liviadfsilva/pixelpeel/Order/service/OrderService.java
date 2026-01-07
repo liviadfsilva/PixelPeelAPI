@@ -3,6 +3,7 @@ package com.liviadfsilva.pixelpeel.Order.service;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -11,6 +12,7 @@ import com.liviadfsilva.pixelpeel.Cart.model.CartItem;
 import com.liviadfsilva.pixelpeel.Cart.service.CartService;
 import com.liviadfsilva.pixelpeel.Order.model.Order;
 import com.liviadfsilva.pixelpeel.Order.model.OrderItem;
+import com.liviadfsilva.pixelpeel.Order.model.OrderStatus;
 import com.liviadfsilva.pixelpeel.Order.model.PaymentStatus;
 import com.liviadfsilva.pixelpeel.Order.repository.OrderRepository;
 
@@ -25,8 +27,12 @@ public class OrderService {
         this.cartService = cartService;
     }
 
-    public List<Order> getAllOrdersByUserId(Long userId) {
+    public Optional<Order> getAllOrdersByUserId(Long userId) {
         return orderRepository.findAllByUserId(userId);
+    }
+
+    public Optional<Order> getOrderById(Long orderId){
+        return orderRepository.findById(orderId);
     }
 
     public Order createOrder(Long userId) {
@@ -40,6 +46,7 @@ public class OrderService {
         Order order = new Order();
         order.setUser(cart.getUser());
         order.setPaymentStatus(PaymentStatus.PENDING);
+        order.setOrderStatus(OrderStatus.WAITING_FOR_PAYMENT);
         order.setTotal(calculateTotal(cart));
 
         List<OrderItem> orderItems = new ArrayList<>();
@@ -73,12 +80,24 @@ public class OrderService {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-    public Order updatePaymentStatus(Long orderId, PaymentStatus status) {
+    public Order updateStatus(Long orderId, PaymentStatus paymentStatus, OrderStatus orderStatus) {
 
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new RuntimeException("Order not found."));
 
-        order.setPaymentStatus(status);
+        order.setPaymentStatus(paymentStatus);
+        order.setOrderStatus(orderStatus);
+
+        return orderRepository.save(order);
+    }
+
+    public Order cancelOrder(Long orderId) {
+
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Order not found."));
+
+        order.setOrderStatus(OrderStatus.ORDER_CANCELLED);
+        order.setPaymentStatus(PaymentStatus.REFUNDED);
 
         return orderRepository.save(order);
     }
