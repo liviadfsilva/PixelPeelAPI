@@ -49,6 +49,10 @@ public class Order {
     @Column(nullable = false)
     private PaymentStatus paymentStatus;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private OrderStatus orderStatus;
+
     @Column(nullable = false)
     private BigDecimal total;
 
