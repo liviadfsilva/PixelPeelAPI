@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.liviadfsilva.pixelpeel.Cart.dtos.CartResponseDTO;
+import com.liviadfsilva.pixelpeel.Cart.dto.CartResponseDTO;
 import com.liviadfsilva.pixelpeel.Cart.model.Cart;
 import com.liviadfsilva.pixelpeel.Cart.service.CartService;
 
