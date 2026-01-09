@@ -81,18 +81,15 @@ public class CartService {
     }
 
     @Transactional
-    public Cart removeItem(Long userId, Long stickerId) {
+    public void removeItem(Long userId, Long stickerId) {
+
         Cart cart = getCartByUserId(userId);
-
-        cartItemRepository.deleteByCartIdAndStickerId(cart.getId(), stickerId);
-
-        return cart;
+        cart.getItems().removeIf(item -> item.getSticker().getId().equals(stickerId));
     }
 
     @Transactional
-    public Cart clearCart(Long userId) {
+    public void clearCart(Long userId) {
         Cart cart = getCartByUserId(userId);
-        cartItemRepository.deleteByCartId(cart.getId());
-        return cart;
+        cart.getItems().clear();
     }
 }
