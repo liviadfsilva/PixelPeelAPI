@@ -27,7 +27,7 @@ public class OrderService {
         this.cartService = cartService;
     }
 
-    public Optional<Order> getAllOrdersByUserId(Long userId) {
+    public List<Order> getAllOrdersByUserId(Long userId) {
         return orderRepository.findAllByUserId(userId);
     }
 
@@ -80,13 +80,35 @@ public class OrderService {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-    public Order updateStatus(Long orderId, PaymentStatus paymentStatus, OrderStatus orderStatus) {
+    public Order updatePaymentStatus(Long orderId, PaymentStatus paymentStatus) {
 
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new RuntimeException("Order not found."));
+                .orElseThrow(() -> new RuntimeException("Order not found"));
 
         order.setPaymentStatus(paymentStatus);
+        return orderRepository.save(order);
+    }
+
+    public Order updateOrderStatus(Long orderId, OrderStatus orderStatus) {
+
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Order not found"));
+
         order.setOrderStatus(orderStatus);
+        return orderRepository.save(order);
+    }
+
+    public Order markAsPaid(Long orderId) {
+
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Order not found"));
+
+        if (order.getPaymentStatus() == PaymentStatus.PAID) {
+            throw new RuntimeException("Order already paid");
+        }
+
+        order.setPaymentStatus(PaymentStatus.PAID);
+        order.setOrderStatus(OrderStatus.ORDER_CONFIRMED);
 
         return orderRepository.save(order);
     }
