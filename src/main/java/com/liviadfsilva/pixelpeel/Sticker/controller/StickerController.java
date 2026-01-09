@@ -2,6 +2,7 @@ package com.liviadfsilva.pixelpeel.Sticker.controller;
 
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.liviadfsilva.pixelpeel.Sticker.dto.StickerCreationDTO;
+import com.liviadfsilva.pixelpeel.Sticker.dto.StickerResponseDTO;
 import com.liviadfsilva.pixelpeel.Sticker.model.Sticker;
 import com.liviadfsilva.pixelpeel.Sticker.service.StickerService;
 
@@ -25,35 +28,52 @@ public class StickerController {
     }
 
     @GetMapping
-    public List<Sticker> getAllStickers() {
-        return service.getAllStickers();
+    public ResponseEntity<List<StickerResponseDTO>> getAllStickers() {
+
+        List<StickerResponseDTO> stickers = service.getAllStickers()
+            .stream()
+            .map(StickerResponseDTO::new)
+            .toList();
+
+        return ResponseEntity.ok(stickers);
     }
 
     @GetMapping("/{id}")
-    public Sticker getStickerById(@PathVariable Long id) {
+    public ResponseEntity<StickerResponseDTO> getStickerById(@PathVariable Long id) {
+
         return service.getStickerById(id)
-        .orElseThrow(() -> new RuntimeException("Sticker not found."));
+                .map(StickerResponseDTO::new)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/{slug}")
-    public Sticker getStickerBySlug(@PathVariable String slug) {
+    @GetMapping("/slug/{slug}")
+    public ResponseEntity<StickerResponseDTO> getStickerBySlug(@PathVariable String slug) {
+
         return service.getStickerBySlug(slug)
-        .orElseThrow(() -> new RuntimeException("Sticker not found."));
+                .map(StickerResponseDTO::new)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public Sticker createSticker(@RequestBody Sticker sticker) {
-        return service.createSticker(sticker);
+    public ResponseEntity<StickerResponseDTO> createSticker(@RequestBody StickerCreationDTO stickerCreationDTO) {
+
+         Sticker sticker = service.createSticker(stickerCreationDTO);
+
+        return ResponseEntity.ok(new StickerResponseDTO(sticker));
     }
 
     @PatchMapping("/{id}")
-    public Sticker updateSticker(@PathVariable Long id, @RequestBody Sticker sticker) {
-        return service.updateSticker(id, sticker);
+    public ResponseEntity<StickerResponseDTO> updateSticker(@PathVariable Long id, @RequestBody StickerCreationDTO stickerCreationDTO) {
+
+        Sticker sticker = service.updateSticker(id, stickerCreationDTO);
+
+        return ResponseEntity.ok(new StickerResponseDTO(sticker));
     }
 
     @DeleteMapping("/{id}")
     public void deleteSticker(@PathVariable Long id) {
         service.deleteSticker(id);
     }
-
 }

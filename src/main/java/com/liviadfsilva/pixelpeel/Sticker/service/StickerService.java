@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.liviadfsilva.pixelpeel.Sticker.dto.StickerCreationDTO;
 import com.liviadfsilva.pixelpeel.Sticker.model.Sticker;
 import com.liviadfsilva.pixelpeel.Sticker.repository.StickerRepository;
 
@@ -29,28 +30,28 @@ public class StickerService {
         return repository.findBySlug(slug);
     }
 
-    public Sticker createSticker(Sticker stickerDetails) {
+    public Sticker createSticker(StickerCreationDTO stickerCreationDTO) {
         Sticker sticker = new Sticker();
-        sticker.setTitle(stickerDetails.getTitle());
-        sticker.setDescription(stickerDetails.getDescription());
-        sticker.setCreator(stickerDetails.getCreator());
-        sticker.setPrice(stickerDetails.getPrice());
-        sticker.setSlug(stickerDetails.getSlug());
-        sticker.setStoragePath(stickerDetails.getStoragePath());
+        sticker.setTitle(stickerCreationDTO.getTitle());
+        sticker.setDescription(stickerCreationDTO.getDescription());
+        sticker.setCreator(stickerCreationDTO.getCreator());
+        sticker.setPrice(stickerCreationDTO.getPrice());
+        sticker.setSlug(stickerCreationDTO.getSlug());
+        sticker.setStoragePath(stickerCreationDTO.getStoragePath());
 
         return repository.save(sticker);
     }
 
-    public Sticker updateSticker(Long id, Sticker stickerDetails) {
+    public Sticker updateSticker(Long id, StickerCreationDTO stickerCreationDTO) {
         Sticker sticker = repository.findById(id)
             .orElseThrow(() -> new RuntimeException("Sticker not found."));
 
-        sticker.setTitle(stickerDetails.getTitle());
-        sticker.setDescription(stickerDetails.getDescription());
-        sticker.setCreator(stickerDetails.getCreator());
-        sticker.setPrice(stickerDetails.getPrice());
-        sticker.setSlug(stickerDetails.getSlug());
-        sticker.setStoragePath(stickerDetails.getStoragePath());
+        sticker.setTitle(stickerCreationDTO.getTitle());
+        sticker.setDescription(stickerCreationDTO.getDescription());
+        sticker.setCreator(stickerCreationDTO.getCreator());
+        sticker.setPrice(stickerCreationDTO.getPrice());
+        sticker.setSlug(stickerCreationDTO.getSlug());
+        sticker.setStoragePath(stickerCreationDTO.getStoragePath());
 
         return repository.save(sticker);
     }
@@ -58,6 +59,4 @@ public class StickerService {
     public void deleteSticker(Long id) {
         repository.deleteById(id);
     }
-
-
 }
