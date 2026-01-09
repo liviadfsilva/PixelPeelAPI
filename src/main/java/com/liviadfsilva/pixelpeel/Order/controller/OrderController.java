@@ -1,15 +1,17 @@
 package com.liviadfsilva.pixelpeel.Order.controller;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.liviadfsilva.pixelpeel.Order.dto.OrderResponseDTO;
 import com.liviadfsilva.pixelpeel.Order.model.Order;
 import com.liviadfsilva.pixelpeel.Order.model.OrderStatus;
 import com.liviadfsilva.pixelpeel.Order.model.PaymentStatus;
@@ -25,15 +27,22 @@ public class OrderController {
         this.orderService = orderService;
     }
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<Order> getAllOrdersByUserId(@PathVariable Long userId){
-        return orderService.getAllOrdersByUserId(userId)
-            .map(ResponseEntity::ok)
-            .orElseGet(() -> ResponseEntity.notFound().build());
+    @GetMapping("/all-orders/{userId}")
+    public ResponseEntity<List<OrderResponseDTO>> getAllOrdersByUserId(@PathVariable Long userId){
+
+        List<OrderResponseDTO> orders = orderService.getAllOrdersByUserId(userId)
+            .stream()
+            .map(OrderResponseDTO::new)
+            .toList();
+
+        return ResponseEntity.ok(orders);
     }
 
-    public ResponseEntity<Order> getOrderById(@PathVariable Long orderId) {
+    @GetMapping("/my-order/{orderId}")
+    public ResponseEntity<OrderResponseDTO> getOrderById(@PathVariable Long orderId) {
+
         return orderService.getOrderById(orderId)
+            .map(OrderResponseDTO::new)
             .map(ResponseEntity::ok)
             .orElseGet(() -> ResponseEntity.notFound().build());
     }
@@ -43,17 +52,34 @@ public class OrderController {
         return orderService.createOrder(userId);
     }
 
-    @PutMapping("/{orderId}/payment-status/order-status")
-    public Order updateStatus(
+    @PatchMapping("/{orderId}/payment-status")
+    public ResponseEntity<OrderResponseDTO> updatePaymentStatus(@PathVariable Long orderId, 
+        @RequestParam PaymentStatus paymentStatus) {
+
+        Order order = orderService.updatePaymentStatus(orderId, paymentStatus);
+        return ResponseEntity.ok(new OrderResponseDTO(order));
+    }
+
+    @PatchMapping("/{orderId}/order-status")
+    public ResponseEntity<OrderResponseDTO> updateOrderStatus(
             @PathVariable Long orderId,
-            @RequestParam PaymentStatus paymentStatus,
-            @RequestParam OrderStatus orderStatus
-    ) {
-        return orderService.updateStatus(orderId, paymentStatus, orderStatus);
+            @RequestParam OrderStatus orderStatus) {
+
+        Order order = orderService.updateOrderStatus(orderId, orderStatus);
+        return ResponseEntity.ok(new OrderResponseDTO(order));
+    }
+
+    @PatchMapping("/{orderId}/pay")
+    public ResponseEntity<OrderResponseDTO> payOrder(@PathVariable Long orderId) {
+
+        Order order = orderService.markAsPaid(orderId);
+        return ResponseEntity.ok(new OrderResponseDTO(order));
     }
 
     @PatchMapping("/cancel/{orderId}")
-    public Order cancelOrder(@PathVariable Long orderId){
-        return orderService.cancelOrder(orderId);
+    public ResponseEntity<OrderResponseDTO> cancelOrder(@PathVariable Long orderId){
+
+        Order order = orderService.cancelOrder(orderId);
+        return ResponseEntity.ok(new OrderResponseDTO(order));
     }
 }
