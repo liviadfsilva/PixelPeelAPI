@@ -50,18 +50,13 @@ public class CartController {
     }
 
     @DeleteMapping("/{userId}/remove")
-    public CartResponseDTO removeItem(
-            @PathVariable Long userId,
-            @RequestParam Long stickerId
-    ) {
-        Cart cart = cartService.removeItem(userId, stickerId);
-        return new CartResponseDTO(cart);
+    public void removeItem(@PathVariable Long userId, @RequestParam Long stickerId) {
+        cartService.removeItem(userId, stickerId);
     }
 
     @DeleteMapping("/{userId}/clear")
-    public CartResponseDTO clearCart(@PathVariable Long userId) {
-        Cart cart = cartService.clearCart(userId);
-        return new CartResponseDTO(cart);
+    public void clearCart(@PathVariable Long userId) {
+        cartService.clearCart(userId);
     }
     
 }
