@@ -9,6 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.liviadfsilva.pixelpeel.Auth.dto.AuthenticatedUserDTO;
 import com.liviadfsilva.pixelpeel.User.model.User;
 import com.liviadfsilva.pixelpeel.User.repository.UserRepository;
 
@@ -63,11 +64,16 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 });
 
                 if (user != null) {
+                    AuthenticatedUserDTO principal = new AuthenticatedUserDTO(user.getId(), user.getEmail());
+
+                    SimpleGrantedAuthority authority =
+                            new SimpleGrantedAuthority("ROLE_" + user.getRole().name());
+
                     UsernamePasswordAuthenticationToken authToken =
                         new UsernamePasswordAuthenticationToken(
-                            user,
+                            principal,
                             null,
-                            List.of(new SimpleGrantedAuthority("USER"))
+                            List.of(authority)
                         );
                     SecurityContextHolder.getContext().setAuthentication(authToken);
                 }
