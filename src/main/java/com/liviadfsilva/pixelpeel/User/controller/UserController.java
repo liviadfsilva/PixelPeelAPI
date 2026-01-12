@@ -1,21 +1,19 @@
 package com.liviadfsilva.pixelpeel.User.controller;
 
-import java.util.List;
-
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.liviadfsilva.pixelpeel.Auth.dto.AuthenticatedUserDTO;
 import com.liviadfsilva.pixelpeel.User.dto.UserRegistrationDTO;
 import com.liviadfsilva.pixelpeel.User.dto.UserResponseDTO;
 import com.liviadfsilva.pixelpeel.User.dto.UserUpdateDTO;
-import com.liviadfsilva.pixelpeel.User.model.Role;
 import com.liviadfsilva.pixelpeel.User.model.User;
 import com.liviadfsilva.pixelpeel.User.service.UserService;
 
@@ -28,45 +26,13 @@ public class UserController {
     public UserController(UserService service) {
         this.service = service;
     }
-
-    @GetMapping
-    public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
-
-        List<UserResponseDTO> users = service.getAllUsers()
-            .stream()
-            .map(user -> new UserResponseDTO(user.getName(), user.getEmail()))
-            .toList();
-
-        return ResponseEntity.ok(users);
-    }
     
-    @GetMapping("/{id}")
-    public ResponseEntity<UserResponseDTO> getUserById(@PathVariable Long id) {
+    @GetMapping("/me")
+    public ResponseEntity<UserResponseDTO> getMe(@AuthenticationPrincipal AuthenticatedUserDTO principal) {
 
-        return service.getUserById(id)
-                .map(user -> new UserResponseDTO(user.getName(), user.getEmail()))
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
-    }
+        User user = service.getUserById(principal.getId());
 
-    @GetMapping("/email/{email}")
-    public ResponseEntity<UserResponseDTO> getUserByEmail(@PathVariable String email) {
-
-        return service.getUserByEmail(email)
-            .map(user -> new UserResponseDTO(user.getName(), user.getEmail()))
-            .map(ResponseEntity::ok)
-            .orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
-    @GetMapping("/role/{role}")
-    public ResponseEntity<List<UserResponseDTO>> getUserByRole(@PathVariable Role role) {
-
-        List<UserResponseDTO> users = service.getUserByRole(role)
-            .stream()
-            .map(user -> new UserResponseDTO(user.getName(), user.getEmail()))
-            .toList();
-
-        return ResponseEntity.ok(users);
+        return ResponseEntity.ok(new UserResponseDTO(user.getName(), user.getEmail()));
     }
 
     @PostMapping("/register")
@@ -77,24 +43,18 @@ public class UserController {
     return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/create-admin")
-    public ResponseEntity<UserResponseDTO> createAdmin(@RequestBody UserRegistrationDTO dto) {
-    User user = service.createAdmin(dto.getName(), dto.getEmail(), dto.getPassword());
-
-    UserResponseDTO response = new UserResponseDTO(user.getName(), user.getEmail());
-    return ResponseEntity.ok(response);
-    }
-
-    @PatchMapping("/{id}")
-    public ResponseEntity<UserResponseDTO> updateUser(@PathVariable Long id, @RequestBody UserUpdateDTO dto) {
-        User user = service.updateUser(id, dto);
+    @PatchMapping("/me")
+    public ResponseEntity<UserResponseDTO> updateUser(
+        @AuthenticationPrincipal AuthenticatedUserDTO principal,
+         @RequestBody UserUpdateDTO dto) {
+        User user = service.updateUser(principal.getId(), dto);
 
         UserResponseDTO response = new UserResponseDTO(user.getName(), user.getEmail());
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable Long id) {
-        service.softDeleteUser(id);
+    @DeleteMapping("/me")
+    public void deleteUser(@AuthenticationPrincipal AuthenticatedUserDTO principal) {
+        service.softDeleteUser(principal.getId());
     }
 }

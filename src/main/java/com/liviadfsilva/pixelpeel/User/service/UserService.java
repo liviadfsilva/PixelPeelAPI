@@ -3,9 +3,12 @@ package com.liviadfsilva.pixelpeel.User.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.liviadfsilva.pixelpeel.Auth.dto.AuthenticatedUserDTO;
 import com.liviadfsilva.pixelpeel.User.dto.UserUpdateDTO;
 import com.liviadfsilva.pixelpeel.User.model.Role;
 import com.liviadfsilva.pixelpeel.User.model.User;
@@ -21,13 +24,30 @@ public class UserService {
         this.repository = repository;
         this.passwordEncoder = passwordEncoder;
     }
-
+    
     public List<User> getAllUsers() {
         return repository.findAll();
     }
 
-    public Optional<User> getUserById(Long id) {
-        return repository.findById(id);
+    private Long getCurrentUserId() {
+        AuthenticatedUserDTO user =
+            (AuthenticatedUserDTO) SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getPrincipal();
+
+        return user.getId();
+    }
+
+    public User getUserById(Long id) {
+        Long currentUserId = getCurrentUserId();
+
+        if (!currentUserId.equals(id)) {
+            throw new AccessDeniedException("You cannot access another user's data.");
+        }
+
+        return repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found."));
     }
 
     public Optional<User> getUserByEmail(String email) {
