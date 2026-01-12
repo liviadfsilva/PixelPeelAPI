@@ -3,7 +3,6 @@ package com.liviadfsilva.pixelpeel.Order.service;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -31,8 +30,15 @@ public class OrderService {
         return orderRepository.findAllByUserId(userId);
     }
 
-    public Optional<Order> getOrderById(Long orderId){
-        return orderRepository.findById(orderId);
+    public Order getOrderByIdForUser(Long orderId, Long userId) {
+        Order order = orderRepository.findByIdAndUserId(orderId, userId)
+            .orElseThrow(() -> new RuntimeException("Order not found"));
+
+        if (!order.getUser().getId().equals(userId)) {
+            throw new RuntimeException("Access denied");
+        }
+
+        return order;
     }
 
     public Order createOrder(Long userId) {
@@ -80,28 +86,25 @@ public class OrderService {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-    public Order updatePaymentStatus(Long orderId, PaymentStatus paymentStatus) {
+    public Order updatePaymentStatus(Long orderId, PaymentStatus paymentStatus, Long userId) {
 
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new RuntimeException("Order not found"));
+        Order order = getOrderByIdForUser(orderId, userId);
 
         order.setPaymentStatus(paymentStatus);
         return orderRepository.save(order);
     }
 
-    public Order updateOrderStatus(Long orderId, OrderStatus orderStatus) {
+    public Order updateOrderStatus(Long orderId, OrderStatus orderStatus, Long userId) {
 
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new RuntimeException("Order not found"));
+        Order order = getOrderByIdForUser(orderId, userId);
 
         order.setOrderStatus(orderStatus);
         return orderRepository.save(order);
     }
 
-    public Order markAsPaid(Long orderId) {
+    public Order markAsPaid(Long orderId, Long userId) {
 
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new RuntimeException("Order not found"));
+        Order order = getOrderByIdForUser(orderId, userId);
 
         if (order.getPaymentStatus() == PaymentStatus.PAID) {
             throw new RuntimeException("Order already paid");
@@ -113,10 +116,9 @@ public class OrderService {
         return orderRepository.save(order);
     }
 
-    public Order cancelOrder(Long orderId) {
+    public Order cancelOrder(Long orderId, Long userId) {
 
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new RuntimeException("Order not found."));
+        Order order = getOrderByIdForUser(orderId, userId);
 
         order.setOrderStatus(OrderStatus.ORDER_CANCELLED);
         order.setPaymentStatus(PaymentStatus.REFUNDED);
