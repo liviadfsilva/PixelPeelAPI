@@ -11,11 +11,15 @@
 
 Pixel Peel is RESTful API built to support a digital stickers e-commerce platform, handling products, users, admins, cart and orders.
 
+<br/>
+
 ## Features ⚒️
 - JWT authentication
 - User roles
 - Product and order management
 - RESTful endpoints for CRUD operations
+
+<br/>
 
 ## Installation 💻
 
@@ -49,6 +53,8 @@ Pixel Peel is RESTful API built to support a digital stickers e-commerce platfor
 
 #### Access the Swagger documentation:
 📜 **http://localhost:8080/swagger-ui/index.html**
+
+<br/>
 
 ## Project Structure 🦴
 ```
@@ -106,14 +112,20 @@ pixelpeel/
 └── pom.xml
 ```
 
+<br/>
+
 ## Inspiration 🌱
 
 This project was born from my love of (digital) stickers, as a way to explore how a backend API for selling digital products could be designed and implemented.
+
+<br/>
 
 ## Future Improvements 🕰️
 
 - Integration with a payment provider
 - Secure download links for purchased stickers
+
+<br/>
 
 ## Author 🌸
 Lívia Silva
