@@ -47,6 +47,7 @@ Pixel Peel is RESTful API built to support a digital stickers e-commerce platfor
    ```bash
     mvn spring-boot:run
     ```
+<br/>
 
 #### The application will start at:
 ꩜ **http://localhost:8080**
