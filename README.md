@@ -117,7 +117,7 @@ pixelpeel/
 
 ## Inspiration 🌱
 
-This project was born from my love of (digital) stickers, as a way to explore how a backend API for selling digital products could be designed and implemented.
+This project was born from my love of stickers as a way to explore how a backend API for selling digital products could be designed and implemented.
 
 <br/>
 
