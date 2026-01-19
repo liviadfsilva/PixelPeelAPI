@@ -51,6 +51,7 @@ Pixel Peel is RESTful API built to support a digital stickers e-commerce platfor
 📜 **http://localhost:8080/swagger-ui/index.html**
 
 ## Project Structure 🦴
+```
 pixelpeel/
 │
 ├── src/
@@ -103,6 +104,7 @@ pixelpeel/
 └── docker-compose.yml
 └── LICENCE
 └── pom.xml
+```
 
 ## Inspiration 🌱
 
