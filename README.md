@@ -9,7 +9,7 @@
 
 ## About ✨
 
-Pixel Peel is RESTful API built to support a digital stickers e-commerce platform, handling products, users, admins, cart and orders.
+Pixel Peel is a RESTful API built to support a digital stickers e-commerce platform, handling products, users, admins, cart and orders.
 
 <br/>
 
