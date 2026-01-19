@@ -129,7 +129,7 @@ This project was born from my love of (digital) stickers, as a way to explore ho
 <br/>
 
 ## Author 🌸
-***Lívia Silva***<br/>
+**Lívia Silva**<br/>
 Backend Developer
 
 - GitHub: https://github.com/seu-username  
