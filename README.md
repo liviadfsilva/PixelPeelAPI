@@ -132,6 +132,8 @@ This project was born from my love of stickers as a way to explore how a backend
 **Lívia Silva**<br/>
 Backend Developer
 
+<br/>
+
 - GitHub: https://github.com/liviadfsilva 
 - LinkedIn: https://linkedin.com/in/liviadfsilva
 
