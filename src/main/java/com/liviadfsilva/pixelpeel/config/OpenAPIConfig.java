@@ -14,6 +14,6 @@ public class OpenAPIConfig {
         return new OpenAPI()
                 .info(new Info()
                     .title("Pixel Peel API")
-                    .description("A Spring Boot E-Commerce of digital stickers."));
+                    .description("A Spring Boot API for an e-commerce platform selling digital stickers."));
     }
 }
