@@ -39,7 +39,7 @@ Pixel Peel is a RESTful API built to support a digital stickers e-commerce platf
 3. **Build and start the application and database with Docker**
 
    ```bash
-    docker-compose up --build
+    docker compose up --build
    ```
 <br/>
 
