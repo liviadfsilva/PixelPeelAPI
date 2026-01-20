@@ -15,6 +15,8 @@ import com.liviadfsilva.pixelpeel.Order.model.OrderStatus;
 import com.liviadfsilva.pixelpeel.Order.model.PaymentStatus;
 import com.liviadfsilva.pixelpeel.Order.repository.OrderRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class OrderService {
     
@@ -41,6 +43,7 @@ public class OrderService {
         return order;
     }
 
+    @Transactional
     public Order createOrder(Long userId) {
 
         Cart cart = cartService.getCartByUserId(userId);
@@ -84,14 +87,6 @@ public class OrderService {
                                 .multiply(BigDecimal.valueOf(item.getQuantity()))
                 )
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
-    }
-
-    public Order updatePaymentStatus(Long orderId, PaymentStatus paymentStatus, Long userId) {
-
-        Order order = getOrderByIdForUser(orderId, userId);
-
-        order.setPaymentStatus(paymentStatus);
-        return orderRepository.save(order);
     }
 
     public Order updateOrderStatus(Long orderId, OrderStatus orderStatus, Long userId) {
