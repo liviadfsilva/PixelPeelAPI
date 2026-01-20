@@ -16,7 +16,6 @@ import com.liviadfsilva.pixelpeel.Auth.dto.AuthenticatedUserDTO;
 import com.liviadfsilva.pixelpeel.Order.dto.OrderResponseDTO;
 import com.liviadfsilva.pixelpeel.Order.model.Order;
 import com.liviadfsilva.pixelpeel.Order.model.OrderStatus;
-import com.liviadfsilva.pixelpeel.Order.model.PaymentStatus;
 import com.liviadfsilva.pixelpeel.Order.service.OrderService;
 
 @RestController
@@ -47,19 +46,11 @@ public class OrderController {
         Order order = orderService.getOrderByIdForUser(orderId, user.getId());
         return ResponseEntity.ok(new OrderResponseDTO(order));
     }
-    
+
     @PostMapping("/create")
-    public Order createOrder(@PathVariable @AuthenticationPrincipal AuthenticatedUserDTO user) {
-        return orderService.createOrder(user.getId());
-    }
+    public ResponseEntity<OrderResponseDTO> createOrder(@AuthenticationPrincipal AuthenticatedUserDTO user) {
 
-    @PatchMapping("/{orderId}/payment-status")
-    public ResponseEntity<OrderResponseDTO> updatePaymentStatus(@PathVariable Long orderId, 
-        @RequestParam PaymentStatus paymentStatus,
-        @AuthenticationPrincipal AuthenticatedUserDTO user
-    ) {
-
-        Order order = orderService.updatePaymentStatus(orderId, paymentStatus, user.getId());
+        Order order = orderService.createOrder(user.getId());
         return ResponseEntity.ok(new OrderResponseDTO(order));
     }
 
