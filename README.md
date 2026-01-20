@@ -36,17 +36,11 @@ Pixel Peel is a RESTful API built to support a digital stickers e-commerce platf
    cp .env.example .env
    ```
 
-3. **Start the database using Docker**
+3. **Build and start the application and database with Docker**
 
    ```bash
-    docker-compose up -d
+    docker-compose up --build
    ```
-
-4. **Run the application**
-
-   ```bash
-    mvn spring-boot:run
-    ```
 <br/>
 
 #### The application will start at:
